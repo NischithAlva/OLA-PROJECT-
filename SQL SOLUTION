@@ -1,0 +1,38 @@
+create database ola;
+use ola;
+select * from bookingola;
+describe bookingola;
+
+# Retrieve all successful bookings:
+create view success_booking as
+select * from bookingola where booking_status= "Success";
+
+# Find the average ride distance for each vehicle type:
+create view  avgerage_distance_travelled_by_each_vehicle as
+select vehicle_type, avg(Ride_Distance) from bookingola group by Vehicle_Type;
+
+#Get the total number of cancelled rides by customers:
+create view total_cancelled_rides_by_customer as
+select count(Canceled_Rides_by_Customer) from bookingola ;
+
+#List the top 5 customers who booked the highest number of rides:
+create view top_5_costomers as
+select customer_id, count(booking_id) as number_of_rides from bookingola
+group by(customer_id) order by number_of_rides desc limit 5;
+
+ # Get the number of rides cancelled by drivers due to personal and car-related issues:
+ create view ride_cancel_due_to_pesonal_machine_issue as
+ select count(Canceled_Rides_by_Driver) as cancelled_due_to_car_or_personal_issues from bookingola where Reason_for_Canceling_by_Driver="Personal & Car related issue";
+
+#  Find the maximum and minimum driver ratings for Prime Sedan bookings:
+create view maximum_and_minium_driver_rateing as
+select max(Driver_Ratings), min(Driver_Ratings ) from bookingola where Vehicle_Type ="Prime Sedan" ;
+
+#Find the average customer rating per vehicle type:
+select Vehicle_Type,avg(Customer_Rating) from bookingola group by vehicle_type;
+
+# Calculate the total booking value of rides completed successfully:
+select count(Booking_Status) from bookingola where booking_status like "%Success";
+
+#List all incomplete rides along with the reason:
+select Incomplete_Rides_Reason,Booking_status from bookingola where Incomplete_Rides='TRUE';
